@@ -8,7 +8,7 @@ $(LIB): atomics.o
 	$(AR) rcs $@ $^
 
 atomics.o: atomics.c
-	$(CC) -O3 -g -c -o $@ $<
+	$(CC) -Wall -Werror -Wextra -O3 -g -c -o $@ $<
 
 clean:
 	rm -rf *.o $(LIB)

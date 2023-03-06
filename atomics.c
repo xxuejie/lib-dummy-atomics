@@ -1,19 +1,240 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-inline bool __atomic_compare_exchange_8 (volatile void *ptr, void *expected, uint64_t desired, bool weak, int success_memorder, int failure_memorder) {
-  (void) weak;
-  (void) success_memorder;
-  (void) failure_memorder;
+void __atomic_thread_fence(int memorder) { (void)memorder; }
 
-  uint64_t *dst = (uint64_t *) ptr;
-  uint64_t *old = (uint64_t *) expected;
+void __atomic_signal_fence(int memorder) { (void)memorder; }
 
-  if (*dst == *old) {
-    *dst = desired;
-    return true;
-  } else {
-    *old = *dst;
-    return false;
+#define _ATOMIC_COMPARE_IMPL(t)                                                \
+  (void)weak;                                                                  \
+  (void)success_memorder;                                                      \
+  (void)failure_memorder;                                                      \
+  t *dst = (t *)ptr;                                                           \
+  t *old = (t *)expected;                                                      \
+  if (*dst == *old) {                                                          \
+    *dst = desired;                                                            \
+    return true;                                                               \
+  } else {                                                                     \
+    *old = *dst;                                                               \
+    return false;                                                              \
   }
+
+bool __atomic_compare_exchange_1(volatile void *ptr, void *expected,
+                                 uint8_t desired, bool weak,
+                                 int success_memorder, int failure_memorder) {
+  _ATOMIC_COMPARE_IMPL(uint8_t);
 }
+
+bool __atomic_compare_exchange_2(volatile void *ptr, void *expected,
+                                 uint16_t desired, bool weak,
+                                 int success_memorder, int failure_memorder) {
+  _ATOMIC_COMPARE_IMPL(uint8_t);
+}
+
+bool __atomic_compare_exchange_4(volatile void *ptr, void *expected,
+                                 uint32_t desired, bool weak,
+                                 int success_memorder, int failure_memorder) {
+  _ATOMIC_COMPARE_IMPL(uint8_t);
+}
+
+bool __atomic_compare_exchange_8(volatile void *ptr, void *expected,
+                                 uint64_t desired, bool weak,
+                                 int success_memorder, int failure_memorder) {
+  _ATOMIC_COMPARE_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_COMPARE_IMPL
+
+#define _ATOMIC_LOAD_IMPL(t)                                                   \
+  (void)memorder;                                                              \
+  return *((t *)ptr)
+
+uint8_t __atomic_load_1(const volatile void *ptr, int memorder) {
+  _ATOMIC_LOAD_IMPL(uint8_t);
+}
+
+uint16_t __atomic_load_2(const volatile void *ptr, int memorder) {
+  _ATOMIC_LOAD_IMPL(uint16_t);
+}
+
+uint32_t __atomic_load_4(const volatile void *ptr, int memorder) {
+  _ATOMIC_LOAD_IMPL(uint32_t);
+}
+
+uint64_t __atomic_load_8(const volatile void *ptr, int memorder) {
+  _ATOMIC_LOAD_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_LOAD_IMPL
+
+#define _ATOMIC_STORE_IMPL(t)                                                  \
+  (void)memorder;                                                              \
+  *((t *)ptr) = val
+
+void __atomic_store_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_STORE_IMPL(uint8_t);
+}
+
+void __atomic_store_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_STORE_IMPL(uint16_t);
+}
+
+void __atomic_store_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_STORE_IMPL(uint32_t);
+}
+
+void __atomic_store_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_STORE_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_STORE_IMPL
+
+#define _ATOMIC_FETCH_ADD_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst += val;                                                                 \
+  return old
+
+uint8_t __atomic_fetch_add_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_FETCH_ADD_IMPL(uint8_t);
+}
+
+uint16_t __atomic_fetch_add_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_FETCH_ADD_IMPL(uint16_t);
+}
+
+uint32_t __atomic_fetch_add_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_FETCH_ADD_IMPL(uint32_t);
+}
+
+uint64_t __atomic_fetch_add_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_FETCH_ADD_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_FETCH_ADD_IMPL
+
+#define _ATOMIC_FETCH_SUB_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst -= val;                                                                 \
+  return old
+
+uint8_t __atomic_fetch_sub_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_FETCH_SUB_IMPL(uint8_t);
+}
+
+uint16_t __atomic_fetch_sub_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_FETCH_SUB_IMPL(uint16_t);
+}
+
+uint32_t __atomic_fetch_sub_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_FETCH_SUB_IMPL(uint32_t);
+}
+
+uint64_t __atomic_fetch_sub_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_FETCH_SUB_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_FETCH_SUB_IMPL
+
+#define _ATOMIC_FETCH_AND_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst &= val;                                                                 \
+  return old
+
+uint8_t __atomic_fetch_and_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_FETCH_AND_IMPL(uint8_t);
+}
+
+uint16_t __atomic_fetch_and_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_FETCH_AND_IMPL(uint16_t);
+}
+
+uint32_t __atomic_fetch_and_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_FETCH_AND_IMPL(uint32_t);
+}
+
+uint64_t __atomic_fetch_and_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_FETCH_AND_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_FETCH_AND_IMPL
+
+#define _ATOMIC_FETCH_XOR_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst ^= val;                                                                 \
+  return old
+
+uint8_t __atomic_fetch_xor_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_FETCH_XOR_IMPL(uint8_t);
+}
+
+uint16_t __atomic_fetch_xor_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_FETCH_XOR_IMPL(uint16_t);
+}
+
+uint32_t __atomic_fetch_xor_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_FETCH_XOR_IMPL(uint32_t);
+}
+
+uint64_t __atomic_fetch_xor_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_FETCH_XOR_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_FETCH_XOR_IMPL
+
+#define _ATOMIC_FETCH_OR_IMPL(t)                                               \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst |= val;                                                                 \
+  return old
+
+uint8_t __atomic_fetch_or_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_FETCH_OR_IMPL(uint8_t);
+}
+
+uint16_t __atomic_fetch_or_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_FETCH_OR_IMPL(uint16_t);
+}
+
+uint32_t __atomic_fetch_or_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_FETCH_OR_IMPL(uint32_t);
+}
+
+uint64_t __atomic_fetch_or_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_FETCH_OR_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_FETCH_OR_IMPL
+
+#define _ATOMIC_FETCH_NAND_IMPL(t)                                             \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst = ~(*dst & val);                                                        \
+  return old
+
+uint8_t __atomic_fetch_nand_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_FETCH_NAND_IMPL(uint8_t);
+}
+
+uint16_t __atomic_fetch_nand_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_FETCH_NAND_IMPL(uint16_t);
+}
+
+uint32_t __atomic_fetch_nand_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_FETCH_NAND_IMPL(uint32_t);
+}
+
+uint64_t __atomic_fetch_nand_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_FETCH_NAND_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_FETCH_NAND_IMPL
