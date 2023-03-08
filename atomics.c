@@ -5,6 +5,31 @@ void __atomic_thread_fence(int memorder) { (void)memorder; }
 
 void __atomic_signal_fence(int memorder) { (void)memorder; }
 
+#define _ATOMIC_EXCHANGE_IMPL(t)                                               \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  t old = *dst;                                                                \
+  *dst = val;                                                                  \
+  return old
+
+uint8_t __atomic_exchange_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_EXCHANGE_IMPL(uint8_t);
+}
+
+uint16_t __atomic_exchange_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_EXCHANGE_IMPL(uint16_t);
+}
+
+uint32_t __atomic_exchange_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_EXCHANGE_IMPL(uint32_t);
+}
+
+uint64_t __atomic_exchange_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_EXCHANGE_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_EXCHANGE_IMPL
+
 #define _ATOMIC_COMPARE_IMPL(t)                                                \
   (void)weak;                                                                  \
   (void)success_memorder;                                                      \
