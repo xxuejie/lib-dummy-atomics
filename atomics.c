@@ -263,3 +263,147 @@ uint64_t __atomic_fetch_nand_8(volatile void *ptr, uint64_t val, int memorder) {
 }
 
 #undef _ATOMIC_FETCH_NAND_IMPL
+
+#define _ATOMIC_ADD_FETCH_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  *dst += val;                                                                 \
+  return *dst
+
+uint8_t __atomic_add_fetch_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_ADD_FETCH_IMPL(uint8_t);
+}
+
+uint16_t __atomic_add_fetch_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_ADD_FETCH_IMPL(uint16_t);
+}
+
+uint32_t __atomic_add_fetch_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_ADD_FETCH_IMPL(uint32_t);
+}
+
+uint64_t __atomic_add_fetch_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_ADD_FETCH_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_ADD_FETCH_IMPL
+
+#define _ATOMIC_SUB_FETCH_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  *dst -= val;                                                                 \
+  return *dst
+
+uint8_t __atomic_sub_fetch_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_SUB_FETCH_IMPL(uint8_t);
+}
+
+uint16_t __atomic_sub_fetch_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_SUB_FETCH_IMPL(uint16_t);
+}
+
+uint32_t __atomic_sub_fetch_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_SUB_FETCH_IMPL(uint32_t);
+}
+
+uint64_t __atomic_sub_fetch_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_SUB_FETCH_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_SUB_FETCH_IMPL
+
+#define _ATOMIC_AND_FETCH_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  *dst &= val;                                                                 \
+  return *dst
+
+uint8_t __atomic_and_fetch_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_AND_FETCH_IMPL(uint8_t);
+}
+
+uint16_t __atomic_and_fetch_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_AND_FETCH_IMPL(uint16_t);
+}
+
+uint32_t __atomic_and_fetch_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_AND_FETCH_IMPL(uint32_t);
+}
+
+uint64_t __atomic_and_fetch_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_AND_FETCH_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_AND_FETCH_IMPL
+
+#define _ATOMIC_XOR_FETCH_IMPL(t)                                              \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  *dst ^= val;                                                                 \
+  return *dst
+
+uint8_t __atomic_xor_fetch_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_XOR_FETCH_IMPL(uint8_t);
+}
+
+uint16_t __atomic_xor_fetch_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_XOR_FETCH_IMPL(uint16_t);
+}
+
+uint32_t __atomic_xor_fetch_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_XOR_FETCH_IMPL(uint32_t);
+}
+
+uint64_t __atomic_xor_fetch_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_XOR_FETCH_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_XOR_FETCH_IMPL
+
+#define _ATOMIC_OR_FETCH_IMPL(t)                                               \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  *dst |= val;                                                                 \
+  return *dst
+
+uint8_t __atomic_or_fetch_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_OR_FETCH_IMPL(uint8_t);
+}
+
+uint16_t __atomic_or_fetch_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_OR_FETCH_IMPL(uint16_t);
+}
+
+uint32_t __atomic_or_fetch_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_OR_FETCH_IMPL(uint32_t);
+}
+
+uint64_t __atomic_or_fetch_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_OR_FETCH_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_OR_FETCH_IMPL
+
+#define _ATOMIC_NAND_FETCH_IMPL(t)                                             \
+  (void)memorder;                                                              \
+  t *dst = (t *)ptr;                                                           \
+  *dst = ~((*dst) & val);                                                      \
+  return *dst
+
+uint8_t __atomic_nand_fetch_1(volatile void *ptr, uint8_t val, int memorder) {
+  _ATOMIC_NAND_FETCH_IMPL(uint8_t);
+}
+
+uint16_t __atomic_nand_fetch_2(volatile void *ptr, uint16_t val, int memorder) {
+  _ATOMIC_NAND_FETCH_IMPL(uint16_t);
+}
+
+uint32_t __atomic_nand_fetch_4(volatile void *ptr, uint32_t val, int memorder) {
+  _ATOMIC_NAND_FETCH_IMPL(uint32_t);
+}
+
+uint64_t __atomic_nand_fetch_8(volatile void *ptr, uint64_t val, int memorder) {
+  _ATOMIC_NAND_FETCH_IMPL(uint64_t);
+}
+
+#undef _ATOMIC_NAND_FETCH_IMPL
