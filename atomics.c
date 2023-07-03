@@ -1,10 +1,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void __atomic_thread_fence(int memorder) { (void)memorder; }
-
-void __atomic_signal_fence(int memorder) { (void)memorder; }
-
 #define _ATOMIC_EXCHANGE_IMPL(t)                                               \
   (void)memorder;                                                              \
   t *dst = (t *)ptr;                                                           \
