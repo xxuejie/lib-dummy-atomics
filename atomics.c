@@ -49,13 +49,13 @@ bool __atomic_compare_exchange_1(volatile void *ptr, void *expected,
 bool __atomic_compare_exchange_2(volatile void *ptr, void *expected,
                                  uint16_t desired, bool weak,
                                  int success_memorder, int failure_memorder) {
-  _ATOMIC_COMPARE_IMPL(uint8_t);
+  _ATOMIC_COMPARE_IMPL(uint16_t);
 }
 
 bool __atomic_compare_exchange_4(volatile void *ptr, void *expected,
                                  uint32_t desired, bool weak,
                                  int success_memorder, int failure_memorder) {
-  _ATOMIC_COMPARE_IMPL(uint8_t);
+  _ATOMIC_COMPARE_IMPL(uint32_t);
 }
 
 bool __atomic_compare_exchange_8(volatile void *ptr, void *expected,
